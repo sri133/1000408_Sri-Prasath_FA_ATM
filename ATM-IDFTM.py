@@ -30,7 +30,7 @@ st.title("🏧 ATM Intelligence Demand Forecasting Dashboard")
 # -----------------------------------------------------
 @st.cache_data
 def load_data():
-    url = "https://raw.githubusercontent.com/sri133/1000408_SriPrasath.P_AIY1_FA2-ATM/main/atm_cash_management_dataset.csv"
+    url = "https://github.com/sri133/1000408_Sri-Prasath_FA_ATM/blob/main/atm_cash_management_dataset.csv"
     return pd.read_csv(url)
 
 df = load_data()
