@@ -220,6 +220,48 @@ st.plotly_chart(px.box(filtered_df,y="Adjusted_Withdrawals"))
 st.plotly_chart(px.bar(filtered_df.groupby("Day_of_Week")["Adjusted_Withdrawals"].mean().reset_index(),x="Day_of_Week",y="Adjusted_Withdrawals"))
 st.plotly_chart(px.line(filtered_df.groupby("Date")["Rolling_Mean_Withdrawals"].mean().reset_index(),x="Date",y="Rolling_Mean_Withdrawals"))
 
+# 🔹 Scatter Plot: Previous Day Cash vs Next Day Cash Demand
+st.subheader("💡 Previous Day Cash vs Next Day Cash Demand")
+if "Previous_Day_Cash_Level" in filtered_df.columns and "Cash_Demand_Next_Day" in filtered_df.columns:
+    fig = px.scatter(
+        filtered_df,
+        x="Previous_Day_Cash_Level",
+        y="Cash_Demand_Next_Day",
+        color="Location_Type",
+        title="Previous Day Cash vs Next Day Cash Demand",
+        labels={"Previous_Day_Cash_Level":"Previous Day Cash","Cash_Demand_Next_Day":"Next Day Cash Demand"}
+    )
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.info("Columns 'Previous_Day_Cash_Level' or 'Cash_Demand_Next_Day' not found in data.")
+
+# 🔹 Bar Chart: Withdrawals by Holiday
+st.subheader("🎉 Impact of Holidays on Withdrawals")
+holiday_df = filtered_df.groupby("Holiday_Flag")["Adjusted_Withdrawals"].mean().reset_index()
+holiday_df["Holiday_Flag"] = holiday_df["Holiday_Flag"].map({0:"Normal Day",1:"Holiday"})
+fig = px.bar(
+    holiday_df,
+    x="Holiday_Flag",
+    y="Adjusted_Withdrawals",
+    title="Average Withdrawals on Holidays vs Normal Days",
+    color="Adjusted_Withdrawals",
+    text="Adjusted_Withdrawals"
+)
+st.plotly_chart(fig, use_container_width=True)
+
+# 🔹 Bar Chart: Withdrawals by Special Event
+st.subheader("🎊 Impact of Special Events on Withdrawals")
+event_df = filtered_df.groupby("Special_Event_Flag")["Adjusted_Withdrawals"].mean().reset_index()
+event_df["Special_Event_Flag"] = event_df["Special_Event_Flag"].map({0:"No Event",1:"Special Event"})
+fig = px.bar(
+    event_df,
+    x="Special_Event_Flag",
+    y="Adjusted_Withdrawals",
+    title="Average Withdrawals on Special Events vs Normal Days",
+    color="Adjusted_Withdrawals",
+    text="Adjusted_Withdrawals"
+)
+st.plotly_chart(fig, use_container_width=True)
 
 # =====================================================
 # 📊 CORRELATION HEATMAP (8th GRAPH)
@@ -257,6 +299,20 @@ filtered_df["PCA2"] = comp[:,1]
 
 st.plotly_chart(px.scatter(filtered_df,x="PCA1",y="PCA2",color="Cluster"))
 
+# 🔹 Cluster Interpretation
+st.subheader("📍 Cluster Interpretation")
+# Example mapping, adjust based on your cluster analysis
+cluster_labels = {
+    0: "High-demand (Urban/Festival)",
+    1: "Steady-demand (Business Hub)",
+    2: "Low-demand (Rural/Residential)"
+}
+
+# Map cluster numbers to labels
+filtered_df["Cluster_Label"] = filtered_df["Cluster"].map(cluster_labels)
+
+# Show sample ATM IDs with cluster labels
+st.dataframe(filtered_df[["ATM_ID","Cluster","Cluster_Label"]].drop_duplicates().sort_values("Cluster"))
 # -----------------------------------------------------
 # ANOMALY
 # -----------------------------------------------------
@@ -266,6 +322,28 @@ filtered_df["Anomaly"] = iso.fit_predict(X)
 
 st.plotly_chart(px.scatter(filtered_df,x="Date",y="Adjusted_Withdrawals",color="Anomaly"))
 
+# 🔹 Anomalies on Holidays/Events
+st.subheader("⚠️ Holiday/Event Anomalies")
+holiday_anom = filtered_df[(filtered_df["Anomaly"]==-1) & (filtered_df["Holiday_Flag"]==1)]
+event_anom = filtered_df[(filtered_df["Anomaly"]==-1) & (filtered_df["Special_Event_Flag"]==1)]
+
+fig = px.scatter(
+    holiday_anom,
+    x="Date",
+    y="Adjusted_Withdrawals",
+    color="ATM_ID",
+    title="Anomalous Withdrawals on Holidays",
+)
+st.plotly_chart(fig, use_container_width=True)
+
+fig = px.scatter(
+    event_anom,
+    x="Date",
+    y="Adjusted_Withdrawals",
+    color="ATM_ID",
+    title="Anomalous Withdrawals on Special Events",
+)
+st.plotly_chart(fig, use_container_width=True)
 # -----------------------------------------------------
 # FORECAST
 # -----------------------------------------------------
