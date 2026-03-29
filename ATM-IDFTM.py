@@ -145,6 +145,25 @@ st.plotly_chart(px.box(filtered_df,y="Adjusted_Withdrawals"))
 st.plotly_chart(px.bar(filtered_df.groupby("Day_of_Week")["Adjusted_Withdrawals"].mean().reset_index(),x="Day_of_Week",y="Adjusted_Withdrawals"))
 st.plotly_chart(px.line(filtered_df.groupby("Date")["Rolling_Mean_Withdrawals"].mean().reset_index(),x="Date",y="Rolling_Mean_Withdrawals"))
 
+
+# =====================================================
+# 📊 CORRELATION HEATMAP (8th GRAPH)
+# =====================================================
+st.subheader("📊 Correlation Heatmap")
+
+numeric_df = filtered_df.select_dtypes(include=np.number)
+
+if len(numeric_df.columns) > 1:
+    corr = numeric_df.corr()
+
+    fig = px.imshow(
+        corr,
+        text_auto=True,
+        aspect="auto",
+        color_continuous_scale="Blues"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 # -----------------------------------------------------
 # CLUSTERING
 # -----------------------------------------------------
