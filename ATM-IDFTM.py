@@ -73,14 +73,31 @@ df = load_data()
 # PREPROCESSING (FULL SAFE)
 # -----------------------------------------------------
 df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-df.fillna(method="ffill", inplace=True)
 
+# 🔢 Encode categorical variables numerically
+day_mapping = {"Monday":1,"Tuesday":2,"Wednesday":3,"Thursday":4,"Friday":5,"Saturday":6,"Sunday":7}
+df["Day_of_Week_Num"] = df["Day_of_Week"].map(day_mapping)
+
+time_mapping = {"Morning":1,"Afternoon":2,"Evening":3,"Night":4}
+df["Time_of_Day_Num"] = df["Time_of_Day"].map(time_mapping)
+
+location_mapping = {"Urban":1,"Semi-Urban":2,"Rural":3}
+df["Location_Type_Num"] = df["Location_Type"].map(location_mapping)
+
+df["Holiday_Flag_Num"] = df["Holiday_Flag"].map({0:0,1:1})
+df["Special_Event_Flag_Num"] = df["Special_Event_Flag"].map({0:0,1:1})
+
+weather_mapping = {w:i+1 for i,w in enumerate(df["Weather_Condition"].unique())}
+df["Weather_Condition_Num"] = df["Weather_Condition"].map(weather_mapping)
+
+df["Nearby_Competitor_ATMs_Num"] = df["Nearby_Competitor_ATMs"].map({0:0,1:1})
+
+# Continue with existing preprocessing
+df.fillna(method="ffill", inplace=True)
 df["Month"] = df["Date"].dt.month
 df["Week_Number"] = df["Date"].dt.isocalendar().week.astype(int)
 df["Is_Weekend"] = df["Date"].dt.day_name().isin(["Saturday","Sunday"]).astype(int)
-
 df = df.sort_values(["ATM_ID","Date"])
-
 df["Rolling_Mean_Withdrawals"] = df.groupby("ATM_ID")["Total_Withdrawals"].transform(lambda x: x.rolling(7,1).mean())
 df["Daily_Change_Pct"] = df.groupby("ATM_ID")["Total_Withdrawals"].pct_change().fillna(0)*100
 
