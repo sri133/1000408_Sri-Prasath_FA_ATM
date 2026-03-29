@@ -152,7 +152,52 @@ col3.metric("Records", len(filtered_df))
 # -----------------------------------------------------
 st.header("📊 Analysis")
 
-st.plotly_chart(px.line(filtered_df,x="Date",y="Adjusted_Withdrawals"))
+# =====================================================
+# ✨ CLEAN & PREMIUM TREND GRAPH (FIXED)
+# =====================================================
+st.subheader("📈 Withdrawals Trend (Clean View)")
+
+view_option = st.radio(
+    "Select View",
+    ["Overall Trend", "Single ATM"],
+    horizontal=True
+)
+
+if view_option == "Overall Trend":
+    trend_df = filtered_df.groupby("Date")["Adjusted_Withdrawals"].mean().reset_index()
+
+    # Smooth line
+    trend_df["Smooth"] = trend_df["Adjusted_Withdrawals"].rolling(7).mean()
+
+    fig = px.line(trend_df, x="Date", y="Adjusted_Withdrawals")
+
+    fig.add_scatter(
+        x=trend_df["Date"],
+        y=trend_df["Smooth"],
+        mode="lines",
+        name="7-Day Smooth",
+        line=dict(width=4)
+    )
+
+else:
+    atm_id = st.selectbox("Select ATM ID", filtered_df["ATM_ID"].unique())
+
+    atm_df = filtered_df[filtered_df["ATM_ID"] == atm_id]
+
+    fig = px.line(atm_df, x="Date", y="Adjusted_Withdrawals")
+
+# ✨ STYLE IMPROVEMENTS
+fig.update_layout(
+    template="plotly_dark",
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    title="Smart Withdrawal Trend",
+    xaxis_title="Date",
+    yaxis_title="Withdrawals",
+    font=dict(size=14),
+)
+
+st.plotly_chart(fig, use_container_width=True)
 st.plotly_chart(px.histogram(filtered_df,x="Adjusted_Withdrawals"))
 st.plotly_chart(px.box(filtered_df,y="Adjusted_Withdrawals"))
 st.plotly_chart(px.bar(filtered_df.groupby("Day_of_Week")["Adjusted_Withdrawals"].mean().reset_index(),x="Day_of_Week",y="Adjusted_Withdrawals"))
