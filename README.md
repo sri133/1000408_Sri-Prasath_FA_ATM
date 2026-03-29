@@ -8,7 +8,7 @@ The ATM Intelligence Ultra Pro transforms raw ATM transaction data into interact
 
 The application combines data preprocessing, exploratory data analysis, clustering, anomaly detection, and predictive modeling into a single, easy-to-use interface.
 
-2. Dataset
+*2. Dataset*
 
 Source: https://github.com/sri133/1000408_Sri-Prasath_FA_ATM/blob/main/atm_cash_management_dataset.csv
 
@@ -18,7 +18,7 @@ ATM & Time Information: ATM_ID, Date, Day_of_Week, Time_of_Day
 Transactions: Total_Withdrawals, Total_Deposits, Previous_Day_Cash_Level, Cash_Demand_Next_Day
 Contextual Factors: Location_Type, Holiday_Flag, Special_Event_Flag, Weather_Condition, Nearby_Competitor_ATMs
 
-3. Data Preprocessing
+*3. Data Preprocessing*
 
 Converted Date into datetime format and extracted features: Month, Week_Number, Is_Weekend.
 
@@ -31,9 +31,9 @@ Normalized numeric features using StandardScaler and MinMaxScaler.
 
 Checked logical consistency to ensure withdrawals did not exceed available balances.
 
-4. Key Features
+*4. Key Features*
 
-4.1 Interactive Filters
+*4.1 Interactive Filters*
 
 Filter data by: Location_Type, Day_of_Week, Time_of_Day, Holiday_Flag, Special_Event_Flag, Weather_Condition, Nearby_Competitor_ATMs.
 
@@ -41,7 +41,7 @@ Demand multiplier slider (1x–3x) for scenario analysis.
 
 Download filtered dataset in CSV format.
 
-4.2 Exploratory Data Analysis
+*4.2 Exploratory Data Analysis*
 
 Distribution Analysis: Histograms and box plots for withdrawals and deposits.
 
@@ -57,7 +57,7 @@ Relationship Analysis: Scatter plot between Previous_Day_Cash_Level and Cash_Dem
 
 Correlation Analysis: Heatmap for all numeric features.
 
-4.3 Clustering Analysis
+*4.3 Clustering Analysis*
 
 Group ATMs based on demand behavior using K-Means Clustering.
 
@@ -73,7 +73,7 @@ Steady-demand (Business hubs)
 
 Low-demand (Rural/Residential ATMs)
 
-4.4 Anomaly Detection
+*4.4 Anomaly Detection*
 
 Detect unusual withdrawal patterns using Isolation Forest.
 
@@ -81,7 +81,7 @@ Anomalies highlighted on scatter plots.
 
 Special focus on holidays and special events for early detection of spikes.
 
-4.5 Forecasting
+*4.5 Forecasting*
 
 Predict next-day cash demand using MLP Regressor.
 
@@ -89,7 +89,7 @@ Key features: Total_Withdrawals, Total_Deposits, Month.
 
 Performance metrics: MAE and R² Score displayed.
 
-5. Visualizations
+*5. Visualizations*
 
 Interactive, responsive charts using Plotly Express:
 
@@ -101,7 +101,7 @@ Correlation heatmaps
 
 Ultra-premium UI with gradient backgrounds, styled metrics, and dynamic layouts.
 
-6. Technologies & Libraries
+*6. Technologies & Libraries*
 
 Python
 
@@ -113,9 +113,26 @@ Plotly Express – interactive visualizations
 
 Scikit-learn – clustering, anomaly detection, scaling, and regression
 
+*7. Summary of Features*
 
+| Feature                                      | Status |
+| -------------------------------------------- | ------ |
+| Raw Data Display                             | ✅      |
+| Distribution Analysis (Histograms, Boxplots) | ✅      |
+| Time-Based Trend Analysis                    | ✅      |
+| Holiday & Event Impact                       | ✅      |
+| External Factors Analysis                    | ✅      |
+| Relationship Analysis & Correlation Heatmap  | ✅      |
+| Clustering with PCA Visualization            | ✅      |
+| Cluster Interpretation Labels                | ✅      |
+| Anomaly Detection                            | ✅      |
+| Holiday/Event Specific Analysis              | ✅      |
+| Forecasting Next-Day Cash Demand             | ✅      |
+| Interactive Filters & Scenario Analysis      | ✅      |
+| Dataset Download                             | ✅      |
+| Premium UI Styling                           | ✅      |
 
-8. Outcome & Insights
+*8. Outcome & Insights*
 
 Classified ATMs into high, steady, and low-demand groups.
 
@@ -125,7 +142,7 @@ Predicted next-day cash demand for better cash allocation.
 
 Empowered bank managers with interactive, actionable insights for operational decisions.
 
-9. Credits: 
+*9. Credits:*
 
 Student Name: Sri Prasath. P
 
