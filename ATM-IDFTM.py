@@ -228,4 +228,4 @@ if len(filtered_df)>10:
     st.metric("R2",round(r2_score(y_test,pred),2))
 
 # -----------------------------------------------------
-st.success("✅ PERFECT: ALL FEATURES + ALL FILTERS + PREMIUM UI")
+st.success("✅End of the App")
