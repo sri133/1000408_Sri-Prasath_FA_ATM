@@ -53,7 +53,7 @@ button {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🏧 ATM Intelligence Ultra Pro Dashboard")
+st.title("🏧 ATM Intelligence Ultra Pro ")
 
 # -----------------------------------------------------
 # LOAD DATA
