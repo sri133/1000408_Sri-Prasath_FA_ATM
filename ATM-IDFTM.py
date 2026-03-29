@@ -95,7 +95,7 @@ def load_data():
 df = load_data()
 
 # -----------------------------------------------------
-# PREPROCESSING
+# PREPROCESSING (FIXED INDENTATION)
 # -----------------------------------------------------
 df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 
@@ -106,15 +106,23 @@ for col in df.columns:
         df[col] = df[col].fillna(df[col].median())
 
 # ORIGINAL FEATURES
- df["Month"] = df["Date"].dt.month
- df["Week_Number"] = df["Date"].dt.isocalendar().week.astype(int)
+df["Month"] = df["Date"].dt.month
+df["Week_Number"] = df["Date"].dt.isocalendar().week.astype(int)
 
 # NEW FEATURES
- df["Is_Weekend"] = df["Date"].dt.day_name().isin(["Saturday","Sunday"]).astype(int)
- df = df.sort_values(["ATM_ID","Date"])
- df["Rolling_Mean_Withdrawals"] = df.groupby("ATM_ID")["Total_Withdrawals"].transform(lambda x: x.rolling(7,1).mean())
- df["Daily_Change_Pct"] = df.groupby("ATM_ID")["Total_Withdrawals"].pct_change().fillna(0)*100
+df["Is_Weekend"] = df["Date"].dt.day_name().isin(["Saturday", "Sunday"]).astype(int)
 
+df = df.sort_values(["ATM_ID", "Date"])
+
+df["Rolling_Mean_Withdrawals"] = df.groupby("ATM_ID")["Total_Withdrawals"].transform(
+    lambda x: x.rolling(7, 1).mean()
+)
+
+df["Daily_Change_Pct"] = df.groupby("ATM_ID")["Total_Withdrawals"].pct_change().fillna(0) * 100
+
+cat_cols = ["Day_of_Week", "Time_of_Day", "Location_Type", "Weather_Condition"]
+for col in cat_cols:
+    df[col] = df[col].astype("category").cat.codes
 # -----------------------------------------------------
 # RAW DATA
 # -----------------------------------------------------
