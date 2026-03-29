@@ -142,6 +142,8 @@ Predicted next-day cash demand for better cash allocation.
 
 Empowered bank managers with interactive, actionable insights for operational decisions.
 
+Streamlit App Link: https://1000408sri-prasathfaatm-rqwxg5ftfjve3zxnmbximv.streamlit.app/ 
+
 *9. Credits:*
 
 Student Name: Sri Prasath. P
