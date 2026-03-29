@@ -1,4 +1,4 @@
-**ATM Intelligence Ultra Pro 
+**ATM Intelligence Ultra Pro**
 
 An interactive Python-based dashboard for monitoring, analyzing, and forecasting ATM cash demand. The dashboard provides actionable insights for banking operations teams, treasury planners, and branch managers to optimize cash management, detect anomalies, and make data-driven decisions.
 
