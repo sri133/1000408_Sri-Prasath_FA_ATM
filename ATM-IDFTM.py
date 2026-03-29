@@ -106,6 +106,19 @@ competitor = st.sidebar.multiselect("Competitor", df["Nearby_Competitor_ATMs"].u
 
 multiplier = st.sidebar.slider("Demand Multiplier (1x - 3x)",1,3,1)
 
+# =====================================================
+# ⚙️ ML CONTROLS (EXTRA FILTERS)
+# =====================================================
+st.sidebar.markdown("## ⚙️ ML Controls")
+
+selected_metrics = st.sidebar.multiselect(
+    "Select Features",
+    df.select_dtypes(include=np.number).columns.tolist(),
+    default=["Total_Withdrawals", "Total_Deposits"]
+)
+
+k_clusters = st.sidebar.slider("Clusters", 2, 8, 3)
+anomaly_rate = st.sidebar.slider("Anomaly Rate", 0.01, 0.15, 0.05)
 # -----------------------------------------------------
 # FILTER DATA
 # -----------------------------------------------------
@@ -168,11 +181,11 @@ if len(numeric_df.columns) > 1:
 # CLUSTERING
 # -----------------------------------------------------
 st.header("📍 Clustering")
-features = ["Total_Withdrawals","Total_Deposits"]
+features = selected_metrics
 scaler = StandardScaler()
 X = scaler.fit_transform(filtered_df[features])
 
-kmeans = KMeans(n_clusters=3)
+kmeans = KMeans(n_clusters=k_clusters)
 filtered_df["Cluster"] = kmeans.fit_predict(X)
 
 pca = PCA(n_components=2)
@@ -186,7 +199,7 @@ st.plotly_chart(px.scatter(filtered_df,x="PCA1",y="PCA2",color="Cluster"))
 # ANOMALY
 # -----------------------------------------------------
 st.header("⚠️ Anomaly")
-iso = IsolationForest(contamination=0.05)
+iso = IsolationForest(contamination=anomaly_rate)
 filtered_df["Anomaly"] = iso.fit_predict(X)
 
 st.plotly_chart(px.scatter(filtered_df,x="Date",y="Adjusted_Withdrawals",color="Anomaly"))
